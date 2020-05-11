@@ -16,12 +16,12 @@ ctx.scale(2, 2)
 requestAnimationFrame(loop)
 console.log("saasd")
 
-const NUM_X  = 128;
-const NUM_Y = 128;
-const CELLSIZE = 10;
+const NUM_X  = 32;
+const NUM_Y = 32;
+const CELLSIZE = 30;
 
 const data = new Array(NUM_X*NUM_Y).fill(0);
-const feather = 30;
+const feather = 400;
 const radius = 200;
 
 function loop(time){
@@ -54,9 +54,14 @@ function loop(time){
 	
 	for(var i  = 0; i < NUM_Y; i++) {
 		for(var j = 0; j < NUM_X; j++) {
-			var bright = Math.floor(data[i*NUM_Y + j]*255);
-			ctx.fillStyle = "rgb("+bright+","+bright+","+bright+")"
-			ctx.fillRect(j*CELLSIZE, i*CELLSIZE, CELLSIZE-1, CELLSIZE-1)
+			var bright = data[i*NUM_Y + j]*0.8;
+			// ctx.fillStyle = "rgb("+bright+","+bright+","+bright+")"
+			ctx.save();
+			ctx.translate(j*CELLSIZE, i*CELLSIZE)
+			ctx.fillStyle = "black"
+			ctx.rotate(1.25*bright*Math.PI)
+			ctx.fillRect((-bright/2)*CELLSIZE, (-bright/2)*CELLSIZE, CELLSIZE*bright, CELLSIZE*bright)
+			ctx.restore()
 		}
 	}
 	console.log(NUM_X)
