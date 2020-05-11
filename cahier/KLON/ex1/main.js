@@ -49,6 +49,7 @@ function loop(time){
 
 
 	ctx.fillStyle = "white"
+	ctx.font = "30px Arial"
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
 	
@@ -60,7 +61,9 @@ function loop(time){
 			ctx.translate(j*CELLSIZE, i*CELLSIZE)
 			ctx.fillStyle = "black"
 			ctx.rotate(1.25*bright*Math.PI)
+			// ctx.scale(bright, bright)
 			ctx.fillRect((-bright/2)*CELLSIZE, (-bright/2)*CELLSIZE, CELLSIZE*bright, CELLSIZE*bright)
+				// ctx.fillText("KLON", 0, 0)
 			ctx.restore()
 		}
 	}
