@@ -7,24 +7,41 @@ const TAU    = Math.PI * 2
 const canvas = document.querySelector('canvas')
 const ctx    = canvas.getContext('2d')
 
+
 canvas.width = window.innerWidth*2;
 canvas.height = window.innerHeight*2
+
+ctx.scale(2, 2)
 
 requestAnimationFrame(loop)
 console.log("saasd")
 
 const NUM_X  = 128;
 const NUM_Y = 128;
-const CELLSIZE = 16;
+const CELLSIZE = 10;
 
 const data = new Array(NUM_X*NUM_Y).fill(0);
+const feather = 30;
+const radius = 200;
 
 function loop(time){
 	requestAnimationFrame(loop)
 
 	for(var i  = 0; i < NUM_Y; i++) {
 		for(var j = 0; j < NUM_X; j++) {
-			data[i*NUM_Y + j] = Math.sqrt((i*CELLSIZE - pointer.y)**2 + (j*CELLSIZE - pointer.x)**2);
+			var d = (Math.sqrt(
+				(i*CELLSIZE - pointer.y)**2 + 
+				(j*CELLSIZE - pointer.x)**2
+				));
+				if(d < radius-feather/2) {
+					data[i*NUM_Y + j] = 0;
+				}
+				else if(d < radius+feather/2) {
+					data[i*NUM_Y + j] = (d - (radius-feather/2))/feather
+				}
+				else {
+					data[i*NUM_Y + j] = 1;
+				}
 		}
 	}
 	
@@ -39,7 +56,7 @@ function loop(time){
 		for(var j = 0; j < NUM_X; j++) {
 			var bright = Math.floor(data[i*NUM_Y + j]*255);
 			ctx.fillStyle = "rgb("+bright+","+bright+","+bright+")"
-			ctx.fillRect(j*CELLSIZE, i*CELLSIZE, CELLSIZE-3, CELLSIZE-3)
+			ctx.fillRect(j*CELLSIZE, i*CELLSIZE, CELLSIZE-1, CELLSIZE-1)
 		}
 	}
 	console.log(NUM_X)
