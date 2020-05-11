@@ -7,56 +7,42 @@ const TAU    = Math.PI * 2
 const canvas = document.querySelector('canvas')
 const ctx    = canvas.getContext('2d')
 
+canvas.width = window.innerWidth*2;
+canvas.height = window.innerHeight*2
+
 requestAnimationFrame(loop)
+console.log("saasd")
+
+const NUM_X  = 128;
+const NUM_Y = 128;
+const CELLSIZE = 16;
+
+const data = new Array(NUM_X*NUM_Y).fill(0);
 
 function loop(time){
 	requestAnimationFrame(loop)
 
-	// resize canvas
-	const ratio  = window.devicePixelRatio
-	const width  = ctx.canvas.clientWidth
-	const height = ctx.canvas.clientHeight
-	const cw = Math.floor(width * ratio)
-	const ch = Math.floor(height * ratio)
-	if (ctx.canvas.width != cw || ctx.canvas.height != ch ){
-	    ctx.canvas.width  = cw
-	    ctx.canvas.height = ch
+	for(var i  = 0; i < NUM_Y; i++) {
+		for(var j = 0; j < NUM_X; j++) {
+			data[i*NUM_Y + j] = Math.sqrt((i*CELLSIZE - pointer.y)**2 + (j*CELLSIZE - pointer.x)**2);
+		}
 	}
+	
+	
 
-	// save transform
-	ctx.save()
 
-	// scale canvas (HiDPI)
-	ctx.scale(ratio, ratio)
-
-	// clear background
-	// ctx.clearRect(0, 0, width, height)
-
-	// rect
-	ctx.fillStyle = 'rgb(255,255,255)'
-	ctx.fillRect(20, 20, 100, 100)
-	ctx.strokeStyle = 'rgb(0,0,0)'
-	ctx.strokeRect(20, 20, 100, 100)
-
-	// circle
-	ctx.beginPath()
-	ctx.arc(180, 70, 50, 0, TAU, false) // x, y, radius, start a., end a., dir
-	ctx.fill()
-	ctx.stroke()
-
-	if (pointer.pressed){
-		ctx.beginPath()
-		ctx.moveTo(pointer.px, pointer.py)
-		ctx.lineTo(pointer.x, pointer.y)
-		ctx.stroke()
+	ctx.fillStyle = "white"
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	
+	
+	for(var i  = 0; i < NUM_Y; i++) {
+		for(var j = 0; j < NUM_X; j++) {
+			var bright = Math.floor(data[i*NUM_Y + j]*255);
+			ctx.fillStyle = "rgb("+bright+","+bright+","+bright+")"
+			ctx.fillRect(j*CELLSIZE, i*CELLSIZE, CELLSIZE-3, CELLSIZE-3)
+		}
 	}
-
-	ctx.restore()
-
-	// previous position
-	pointer.px = pointer.x
-	pointer.py = pointer.y
-
+	console.log(NUM_X)
 }
 
 // pointer events
